@@ -21,6 +21,8 @@ This is a tool created for performing brute force attacks on ssh services,http f
 
 [2]for http brue force
 
+[3]for ftp brue force
+
 enter your choice:</br>
 1</br>
 enter username</br>
